@@ -1,0 +1,18 @@
+version: '3'
+services:
+  console:
+    image: java:8
+    container_name: console
+    working_dir: /code
+    ports:
+      - 8789:8080
+    volumes:
+      - ./rocketmq-console-ng-1.0.0.jar:/code/rocketmq-console.jar
+    command: java -jar /code/rocketmq-console.jar
+    networks:
+      - rocketmq
+
+networks:
+  rocketmq:
+    external:
+      name: rocketmq

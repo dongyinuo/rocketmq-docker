@@ -1,0 +1,32 @@
+version: '3'
+services:
+  namesrv:
+    image: rocketmqinc/rocketmq:4.3.0
+    container_name: rmqnamesrv
+    networks:
+      - rocketmq
+    ports:
+      - 9876:9876
+    volumes:
+      - ./data/namesrv/logs:/root/logs
+      - ./data/namesrv/store:/root/store
+    command: sh mqnamesrv
+  broker:
+    image: rocketmqinc/rocketmq:4.3.0
+    container_name: rmqbroker
+    networks:
+      - rocketmq
+    ports:
+      - 10909:10909
+      - 10911:10911
+    volumes:
+      - ./data/broker/logs:/root/logs
+      - ./data/broker/store:/root/store
+    command: sh mqbroker -n namesrv:9876
+    depends_on:
+      - namesrv
+
+networks:
+  rocketmq:
+    external:
+      name: rocketmq
